@@ -20,10 +20,30 @@
     <button id="createUserBtn">Join Chat</button>
   </form>
 
+  <div class="mainContainer">
+    <div class="channelsAndUsersOnlineContainer">
+      <h1 class="brand">Make Chat</h1>
+      <div class="channels">
+        <h2 class="channelsLabel">Channels</h2>
+        <div class="newChannelForm"><input id="newChannelInput" placeholder="New Channel" /><button
+            id="newChannelBtn">Create</button></div>
+        <div class="channel-current">General</div>
+      </div>
+      <h2>Online Users</h2>
+      <div class="usersOnline"></div>
+    </div>
+    <div class="chatContainer">
+      <div class="chatContainerFluid">
+        <div class="messageContainer">
+          <h2>Messages</h2>
+        </div>
+        <div class="textChatDivide"></div>
+        <div class="chatBox"><textarea id="chatInput" placeholder="Type a message"></textarea><button class="btn"
+            id="sendChatBtn">Send</button></div>
+      </div>
+    </div>
+  </div>
+
 </body>
 
 </html>
-
-{{!-- socket.io npm module automatically sets up a /socket.io/socket.io.js path in this project to the socket.io frontend JS, so we require the client-side socket.io script here --}}
-
-{{!-- jQuery used in MS tutorial but this def can be done with vanilla JS; jQuery makes DOM manip easier --}}
