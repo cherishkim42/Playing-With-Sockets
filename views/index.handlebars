@@ -3,7 +3,10 @@
 
 <head>
   <meta charset="utf-8">
-  <title></title>
+  <title>Make Chat</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="socket.io/socket.io.js"></script>
+  <script src="/public/index.js"></script>
 </head>
 
 <body>
@@ -11,3 +14,7 @@
 </body>
 
 </html>
+
+{{!-- socket.io npm module automatically sets up a /socket.io/socket.io.js path in this project to the socket.io frontend JS, so we require the client-side socket.io script here --}}
+
+{{!-- jQuery used in MS tutorial but this def can be done with vanilla JS; jQuery makes DOM manip easier --}}
