@@ -3,8 +3,9 @@ const app = express()
 const server = require('http').Server(app)
 
 const io = require('socket.io')(server)
-io.on('connection', (socket) => {
-  console.log('🔌new user connected woo🔌')
+io.on('connection', (socket) => { // Execute what's in this fxn when new socket (client) connections are formed
+  console.log('💗new user connected woo💗')
+  require('./sockets/chat.js')(io, socket)
 })
 
 const exphbs = require('express-handlebars')
