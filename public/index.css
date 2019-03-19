@@ -172,4 +172,3 @@ label {
   flex-direction: row;
   width : 100%;
 }
-/* since display is none here, styling doesn't appear yet. when jQuery is used to update display to flex, styling shall appear */
