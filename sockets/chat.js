@@ -1,4 +1,4 @@
-module.exports = (io, socket, onlineUsers) => {
+module.exports = (io, socket, onlineUsers, channels) => {
 
   //This bad boy (slaps) listens sooooo hard for an event called 'new user'. He is a MATCHING SOCKET LISTENER!
   //Listen for 'new user' socket emits
@@ -31,6 +31,16 @@ module.exports = (io, socket, onlineUsers) => {
   })
 
   socket.on('new channel', (newChannel) => {
-    console.log(newChannel)
+    //Save the new channel to our channels object. The array will hold the msgs
+    channels[newChannel] = []
+    //Have the socket join the new channel room
+    socket.join(newChannel)
+    //Inform all clients of the new channel
+    io.emit('new channel', newChannel)
+    //To the client that made the new channel, emit to signal that they should change their channel to the one they made
+    socket.emit('user changed channel', {
+      channel : newChannel,
+      messages : channels[newChannel]
+    })
   })
 }
