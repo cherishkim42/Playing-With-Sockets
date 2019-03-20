@@ -3,10 +3,13 @@ const app = express()
 const server = require('http').Server(app)
 
 const io = require('socket.io')(server)
-io.on('connection', (socket) => { // Execute what's in this fxn when new socket (client) connections are formed
+//Store online users here
+let onlineUsers = {}
+io.on('connection', (socket) => { //Execute what's in this fxn when new socket (client) connections are formed
   console.log('💗new user connected woo💗')
-  require('./sockets/chat.js')(io, socket)
+  require('./sockets/chat.js')(io, socket, onlineUsers)
 })
+//Using object instead of array to save our users because this object will act as a DICTIONARY to access each user's ID (unique socket ID that IDs the socket as a unique connected user) by their username
 
 const exphbs = require('express-handlebars')
 app.engine('handlebars', exphbs())

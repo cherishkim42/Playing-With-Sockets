@@ -1,9 +1,10 @@
 $(document).ready(() => {
   //Connect to the socket.io server
   const socket = io.connect()
-
   //Keep track of current user
-  let currentUser;
+  let currentUser
+  //Get the online users from the server
+  socket.emit('get online users')
 
   $('#createUserBtn').click((e) => {
     e.preventDefault()
@@ -51,6 +52,23 @@ $(document).ready(() => {
         <p class='messageUser'>${data.sender}: </p>
         <p class='messageText'>${data.message}</p>
     `)
+  })
+
+  //show the users on the page
+  socket.on('get online users', (onlineUsers) => {
+    //The following for loop's syntax: for(key in obj)
+    //Our usernames are keys in the object of onlineUsers
+    for(username in onlineUsers){
+      $('.usersOnline').append(`<div class='userOnline'>${username}</div>`)
+    }
+  })
+
+  //refresh the online user list
+  socket.on('user has left', (onlineUsers) => {
+    $('.usersOnline').empty()
+    for(username in onlineUsers){
+      $('.usersOnline').append(`<p>${username}</p>`)
+    }
   })
 
 })
