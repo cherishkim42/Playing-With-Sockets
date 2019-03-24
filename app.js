@@ -3,10 +3,11 @@ const app = express()
 const server = require('http').Server(app)
 
 const io = require('socket.io')(server)
-//Store online users here
+//Store online users in this object. This way, they can persist across new clients
 let onlineUsers = {}
+
 //Save the channels in this object. This way, they can persist across new clients
-let channels = {'General' : []} //General channel is already included in the object by default. This isn't programmatically necessary. Just a preference thing
+let channels = {'General' : []} //Here, "General" channel is already included in the object by default. This isn't programmatically necessary. Just a preference thing
 
 io.on('connection', (socket) => { //Execute what's in this fxn when new socket (client) connections are formed
   console.log('💗new user connected woo💗')

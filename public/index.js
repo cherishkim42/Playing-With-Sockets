@@ -24,14 +24,13 @@ $(document).ready(() => {
   //We need this button to emit a NEW MESSAGE event to the server and have the server emit a NEW MESSAGE event to all connected clients
   $('#sendChatBtn').click((e) => {
     e.preventDefault()
-    //Get the msg txt value
-    let message = $('#chatInput').val()
-    //Make sure it's not empty
-    if(message.length > 0){
-      //Emit the msg with the current user to the server
-      socket.emit('new message', {
+    let channel = $('.channel-current').text() //Gets the client's channel
+    let message = $('#chatInput').val() //Gets the msg txt value
+    if(message.length > 0){ //Makes sure the msg isn't empty
+      socket.emit('new message', { //Emits the msg w/ current user to the server
         sender : currentUser,
         message : message,
+        channel : channel //Sends the channel to the server
       })
       $('#chatInput').val("")
     }
@@ -45,13 +44,16 @@ $(document).ready(() => {
     $('.usersOnline').append(`<div class='userOnline'>${username}</div>`)
   })
 
-  //output the new message
+  //output the new message IFF user is currently in that channel
   socket.on('new message', (data) => {
-    $('.messageContainer').append(`
-      <div class='message'>
-        <p class='messageUser'>${data.sender}: </p>
-        <p class='messageText'>${data.message}</p>
-    `)
+    let currentChannel = $('.channel-current').text()
+    if(currentChannel == data.channel){
+      $('.messageContainer').append(`
+        <div class='message'>
+          <p class='messageUser'>${data.sender}: </p>
+          <p class='messageText'>${data.message}</p>
+      `)
+    }
   })
 
   //show the users on the page
@@ -63,7 +65,7 @@ $(document).ready(() => {
     }
   })
 
-  //refresh the online user list
+  //refresh the online user list when a 'user has left'
   socket.on('user has left', (onlineUsers) => {
     $('.usersOnline').empty()
     for(username in onlineUsers){

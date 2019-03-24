@@ -13,9 +13,10 @@ module.exports = (io, socket, onlineUsers, channels) => {
   })
 
   socket.on('new message', (data) => {
-    //Send that data back to all clients
-    console.log(`🎤 ${data.sender}: ${data.message} 🎤`)
-    io.emit('new message', data)
+    channels[data.channel].push({sender : data.sender, message : data.message}) //Saves new msg to the channel
+    io.to(data.channel).emit('new message', data)
+    console.log(`🎤 In ${data.channel}, ${data.sender} said: ${data.message} 🎤`)
+    // io.emit('new message', data) //Broadcast to all clients on all channels
   })
 
   socket.on('get online users', () => {
@@ -30,15 +31,13 @@ module.exports = (io, socket, onlineUsers, channels) => {
     io.emit('user has left', onlineUsers)
   })
 
+  //Registers event of a new channel being made
   socket.on('new channel', (newChannel) => {
-    //Save the new channel to our channels object. The array will hold the msgs
-    channels[newChannel] = []
-    //Have the socket join the new channel room
-    socket.join(newChannel)
+    channels[newChannel] = [] //Save newChannel to channels object. The array holds msgs
+    socket.join(newChannel) //Socket joins the newChannel room
     //Inform all clients of the new channel
-    io.emit('new channel', newChannel)
-    //To the client that made the new channel, emit to signal that they should change their channel to the one they made
-    socket.emit('user changed channel', {
+    io.emit('new channel', newChannel) //Notify all clients of newChannel
+    socket.emit('user changed channel', { //Notify client who made newChannel to change channels to the one they made
       channel : newChannel,
       messages : channels[newChannel]
     })
